@@ -14,6 +14,26 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
+                .task {
+                    let api = APIClient()
+
+                    Task {
+
+                        do {
+
+                            let user: User =
+                                try await api.request(
+                                    endpoint: .user(2)
+                                )
+
+                            print(user)
+
+                        } catch {
+
+                            print(error)
+                        }
+                    }
+                }
         }
         .padding()
     }
