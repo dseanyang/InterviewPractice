@@ -7,11 +7,33 @@
 
 import SwiftUI
 
+
 @main
 struct InterviewPracticeApp: App {
+
     var body: some Scene {
+
         WindowGroup {
-            ContentView()
+
+            let api =
+                APIClient()
+
+            let repository =
+                UserRepositoryImpl(
+                    api: api
+                )
+
+            let viewModel =
+                UserViewModel(
+                    repository:
+                        repository
+                )
+
+            UserView(
+                viewModel:
+                    viewModel
+            )
         }
     }
 }
+
