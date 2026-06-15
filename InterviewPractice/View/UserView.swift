@@ -38,4 +38,32 @@ struct UserView: View {
     }
 }
 
+#Preview("Success") {
 
+    let repository = UserRepositoryImpl(
+        api: MockAPI()
+    )
+
+    let viewModel = UserViewModel(
+        repository: repository
+    )
+
+    UserView(
+        viewModel: viewModel
+    )
+}
+
+#Preview("Error") {
+
+    let repository = UserRepositoryImpl(
+        api: MockFailAPI()
+    )
+
+    let viewModel = UserViewModel(
+        repository: repository
+    )
+
+    UserView(
+        viewModel: viewModel
+    )
+}
