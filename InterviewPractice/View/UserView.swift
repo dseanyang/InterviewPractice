@@ -9,26 +9,33 @@ struct UserView: View {
     init(
         viewModel: UserViewModel
     ) {
-
-        _viewModel =
-            StateObject(
-                wrappedValue:
-                    viewModel
-            )
+        _viewModel = StateObject(
+            wrappedValue: viewModel
+        )
     }
 
+    
+    
     var body: some View {
 
         VStack {
 
-            if let user =
-                viewModel.user {
-
-                Text(user.name)
-
-            } else {
+            if viewModel.isLoading {
 
                 ProgressView()
+
+            } else if let user =
+                        viewModel.user {
+
+                ProfileView(
+                    viewModel: viewModel
+                )
+
+            } else if let error =
+                        viewModel.errorMessage {
+
+                Text(error)
+                    .foregroundStyle(.red)
             }
         }
         .task {
@@ -38,32 +45,27 @@ struct UserView: View {
     }
 }
 
-#Preview("Success") {
+#Preview {
 
-    let repository = UserRepositoryImpl(
-        api: MockAPI()
-    )
+    let repository =
+        UserRepositoryImpl(
+            api: MockAPI()
+        )
 
-    let viewModel = UserViewModel(
-        repository: repository
-    )
+    let useCase =
+        GetUserUseCaseImpl(
+            repository:
+                repository
+        )
 
-    UserView(
-        viewModel: viewModel
-    )
-}
-
-#Preview("Error") {
-
-    let repository = UserRepositoryImpl(
-        api: MockFailAPI()
-    )
-
-    let viewModel = UserViewModel(
-        repository: repository
-    )
+    let viewModel =
+        UserViewModel(
+            useCase:
+                useCase
+        )
 
     UserView(
-        viewModel: viewModel
+        viewModel:
+            viewModel
     )
 }

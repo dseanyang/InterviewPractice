@@ -1,7 +1,8 @@
 import Combine
 
 @MainActor
-final class UserViewModel: ObservableObject {
+final class UserViewModel:
+ObservableObject {
 
     @Published
     var user: User?
@@ -12,18 +13,33 @@ final class UserViewModel: ObservableObject {
     @Published
     var errorMessage: String?
 
-    private let repository: UserRepository
+    private let useCase:
+        GetUserUseCase
 
-    init(repository: UserRepository) {
-        self.repository = repository
+    init(
+        useCase: GetUserUseCase
+    ) {
+        self.useCase = useCase
     }
 
     func loadUser() async {
+
+        isLoading = true
+
+        defer {
+            isLoading = false
+        }
+
         do {
-            user = try await repository.getUser(id: 1)
+
+            user =
+                try await useCase
+                    .execute(id: 1)
+
         } catch {
-            errorMessage = error.localizedDescription
+
+            errorMessage =
+                error.localizedDescription
         }
     }
 }
-

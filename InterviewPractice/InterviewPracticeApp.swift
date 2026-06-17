@@ -7,33 +7,29 @@
 
 import SwiftUI
 
-
 @main
-struct InterviewPracticeApp: App {
+struct InterviewPracticeApp:
+App {
+
+    let container =
+        AppContainer()
+
+    @StateObject
+    var session =
+        SessionStore()
 
     var body: some Scene {
 
         WindowGroup {
 
-            let api =
-                APIClient()
-
-            let repository =
-                UserRepositoryImpl(
-                    api: api
-                )
-
-            let viewModel =
-                UserViewModel(
-                    repository:
-                        repository
-                )
-
             UserView(
                 viewModel:
-                    viewModel
+                    container
+                        .makeUserViewModel()
+            )
+            .environmentObject(
+                session
             )
         }
     }
 }
-
